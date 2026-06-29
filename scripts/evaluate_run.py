@@ -1,0 +1,40 @@
+"""Evaluate a RAG run-result JSON file with RAGAS metrics."""
+
+from __future__ import annotations
+
+import argparse
+import asyncio
+import sys
+from pathlib import Path
+
+
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+SRC_DIR = PROJECT_ROOT / "src"
+if str(SRC_DIR) not in sys.path:
+    sys.path.insert(0, str(SRC_DIR))
+
+from rag_chunking.evaluation.ragas_metrics import RagasEvaluationConfig, evaluate_run_file  # noqa: E402
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="Evaluate a RAG run-result JSON file with RAGAS.")
+    parser.add_argument("input_path")
+    parser.add_argument("--output-path", default=None)
+    parser.add_argument("--evaluator-model", default="gpt-3.5-turbo")
+    parser.add_argument("--embedding-model", default=None)
+    return parser.parse_args()
+
+
+def main() -> None:
+    args = parse_args()
+    config = RagasEvaluationConfig(
+        input_path=args.input_path,
+        output_path=args.output_path,
+        evaluator_model=args.evaluator_model,
+        embedding_model=args.embedding_model,
+    )
+    asyncio.run(evaluate_run_file(config))
+
+
+if __name__ == "__main__":
+    main()
