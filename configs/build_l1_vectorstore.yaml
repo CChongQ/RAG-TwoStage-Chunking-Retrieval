@@ -1,0 +1,5 @@
+# Structure-based Level 1 vector-store build
+dataset_file: gold_test_file_30.json
+vector_dir: L1_vector_final
+max_documents: null
+overwrite: false

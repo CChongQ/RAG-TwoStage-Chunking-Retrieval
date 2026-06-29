@@ -1,0 +1,8 @@
+# Evaluation analysis inputs. Update paths after generating/evaluating new runs.
+method_files:
+  Baseline: evaluation/eval_2025-04-05_gpt-4o_run_results_baseline.json
+  Structured_Baseline: evaluation/eval_2025-04-05_gpt-4o_run_results_baseline_L1.json
+  Sentence_Window: evaluation/eval_2025-04-05_run_results_sw_gpt4o_2025-04-05.json
+  Proposition: evaluation/eval_2025-04-06_run_results_proposition_gpt4o.json
+fact_based_questions: []
+broad_questions: []

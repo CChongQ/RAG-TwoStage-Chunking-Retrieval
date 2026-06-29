@@ -1,0 +1,15 @@
+# Two-stage structure + proposition pipeline
+dataset_file: gold_test_file_30.json
+l1_vector_dir: L1_vector_final
+l2_vector_dir: L2_vector
+output_path: null
+l1_top_k: 3
+l1_fetch_k: 10
+result_top_k: 10
+l2_model: gpt-3.5-turbo
+embedding_model: text-embedding-3-large
+generation_model: gpt-4o
+temperature: 0.2
+top_p: 0.9
+mode: prod
+max_questions: null
