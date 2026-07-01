@@ -62,12 +62,11 @@ def empty_scores() -> EvaluationScores:
 def create_ragas_wrappers(evaluator_model: str = "gpt-3.5-turbo", embedding_model: str | None = None) -> tuple[Any, Any]:
     """Create RAGAS LLM and embedding wrappers."""
     try:
-        from langchain.chat_models import ChatOpenAI
-        from langchain.embeddings import OpenAIEmbeddings
+        from langchain_openai import ChatOpenAI, OpenAIEmbeddings
         from ragas.embeddings import LangchainEmbeddingsWrapper
         from ragas.llms import LangchainLLMWrapper
     except ImportError as exc:
-        raise ImportError("RAGAS evaluation requires ragas, langchain, and OpenAI dependencies.") from exc
+        raise ImportError("RAGAS evaluation requires ragas and langchain-openai dependencies.") from exc
 
     evaluator_llm = LangchainLLMWrapper(ChatOpenAI(model=evaluator_model))
     embeddings = OpenAIEmbeddings(model=embedding_model) if embedding_model else OpenAIEmbeddings()

@@ -11,7 +11,11 @@ from rag_chunking.chunking.structure_based import SectionRecord, StructureBasedC
 from rag_chunking.config import PROJECT_ROOT
 from rag_chunking.data_io import load_json
 from rag_chunking.loaders import resolve_dataset_file
-from rag_chunking.vectorstores import create_chroma_vector_store
+from rag_chunking.vectorstores import (
+    DEFAULT_OPENAI_EMBED_MODEL,
+    create_chroma_vector_store,
+    create_openai_embedding,
+)
 
 
 @dataclass(frozen=True)
@@ -20,6 +24,7 @@ class L1VectorBuildConfig:
 
     dataset_file: str = "gold_test_file_30.json"
     vector_dir: str = "L1_vector_final"
+    embedding_model: str = DEFAULT_OPENAI_EMBED_MODEL
     max_documents: int | None = None
     overwrite: bool = False
 
@@ -40,7 +45,7 @@ def build_l1_sections(config: L1VectorBuildConfig | None = None) -> list[Section
 
 
 def build_l1_vector_store(config: L1VectorBuildConfig | None = None) -> tuple[Any, list[SectionRecord]]:
-    """Build and persist the L1 Chroma vector store."""
+    """Build and persist the level 1 Chroma vector store, with structure-based chunking."""
     config = config or L1VectorBuildConfig()
     vector_dir = _resolve_project_path(config.vector_dir)
 
@@ -56,5 +61,6 @@ def build_l1_vector_store(config: L1VectorBuildConfig | None = None) -> tuple[An
     chunker = StructureBasedChunker()
     sections = chunker.chunk_documents(records, max_documents=config.max_documents)
     documents = chunker.to_langchain_documents(sections)
-    vector_store = create_chroma_vector_store(documents, vector_dir)
+    embedding = create_openai_embedding(config.embedding_model)
+    vector_store = create_chroma_vector_store(documents, vector_dir, embedding=embedding)
     return vector_store, sections

@@ -6,17 +6,32 @@ from pathlib import Path
 from typing import Any
 
 
+DEFAULT_OPENAI_EMBED_MODEL = "text-embedding-3-large"
+
+
+def create_openai_embedding(model: str | None = DEFAULT_OPENAI_EMBED_MODEL) -> Any:
+    """Create the shared embedding model used for vector stores."""
+    try:
+        from langchain_openai import OpenAIEmbeddings
+    except ImportError as exc:
+        raise ImportError("create_openai_embedding requires langchain-openai.") from exc
+
+    return OpenAIEmbeddings(model=model) if model else OpenAIEmbeddings()
+
+
 def create_faiss_vector_store(documents: list[Any], embedding: Any | None = None) -> Any:
     """Create an in-memory FAISS vector store from LangChain documents."""
     try:
-        from langchain.vectorstores import FAISS
-        from langchain_openai import OpenAIEmbeddings
-    except ImportError as exc:
-        raise ImportError(
-            "create_faiss_vector_store requires langchain and langchain-openai."
-        ) from exc
+        from langchain_community.vectorstores import FAISS
+    except ImportError:
+        try:
+            from langchain.vectorstores import FAISS
+        except ImportError as exc:
+            raise ImportError(
+                "create_faiss_vector_store requires langchain-community or langchain."
+            ) from exc
 
-    embedding_model = embedding or OpenAIEmbeddings()
+    embedding_model = embedding or create_openai_embedding()
     return FAISS.from_documents(documents, embedding=embedding_model)
 
 
@@ -39,13 +54,10 @@ def create_chroma_vector_store(
     """Create and persist a Chroma vector store from documents."""
     try:
         from langchain_chroma import Chroma
-        from langchain_openai import OpenAIEmbeddings
     except ImportError as exc:
-        raise ImportError(
-            "create_chroma_vector_store requires langchain-chroma and langchain-openai."
-        ) from exc
+        raise ImportError("create_chroma_vector_store requires langchain-chroma.") from exc
 
-    embedding_model = embedding or OpenAIEmbeddings()
+    embedding_model = embedding or create_openai_embedding()
     return Chroma.from_documents(
         documents=documents,
         embedding=embedding_model,
@@ -58,15 +70,19 @@ def load_chroma_vector_store(
     embedding: Any | None = None,
 ) -> Any:
     """Load a persisted Chroma vector store."""
+    persist_path = Path(persist_directory)
+    if not persist_path.exists():
+        raise FileNotFoundError(
+            f"Chroma vector store does not exist: {persist_path}. "
+            "Build it first or update the configured vector directory."
+        )
+
     try:
         from langchain_chroma import Chroma
-        from langchain_openai import OpenAIEmbeddings
     except ImportError as exc:
-        raise ImportError(
-            "load_chroma_vector_store requires langchain-chroma and langchain-openai."
-        ) from exc
+        raise ImportError("load_chroma_vector_store requires langchain-chroma.") from exc
 
-    embedding_model = embedding or OpenAIEmbeddings()
+    embedding_model = embedding or create_openai_embedding()
     return Chroma(
         persist_directory=str(persist_directory),
         embedding_function=embedding_model,

@@ -34,7 +34,8 @@ class StructureBasedChunker:
         return BeautifulSoup(str(text), "html.parser")
 
     def _process_table(self, table: Any) -> str:
-        """Convert a table into compact prose while skipping navigation tables."""
+        """Convert a table into compact prose, skipping navigation tables."""
+
         try:
             table_classes = table.get("class", []) or []
             if any(table_class in self.skip_table_classes for table_class in table_classes):

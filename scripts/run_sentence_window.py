@@ -12,34 +12,42 @@ SRC_DIR = PROJECT_ROOT / "src"
 if str(SRC_DIR) not in sys.path:
     sys.path.insert(0, str(SRC_DIR))
 
+from rag_chunking.config import load_dataclass_config  # noqa: E402
 from rag_chunking.pipelines.sentence_window import (  # noqa: E402
     SentenceWindowConfig,
     run_sentence_window_pipeline,
 )
 
 
+DEFAULT_CONFIG = "configs/sentence_window.yaml"
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Run the sentence-window RAG pipeline.")
-    parser.add_argument("--dataset-file", default="gold_test_file_30.json")
-    parser.add_argument("--l1-vector-dir", default="L1_vector_final")
-    parser.add_argument("--node-index-dir", default="L2_nodes_test")
-    parser.add_argument("--output-path", default="evaluation/run_results_sentence_window.json")
-    parser.add_argument("--l1-top-k", type=int, default=3)
-    parser.add_argument("--l1-fetch-k", type=int, default=10)
-    parser.add_argument("--window-size", type=int, default=3)
-    parser.add_argument("--top-n", type=int, default=10)
-    parser.add_argument("--top-k-2", type=int, default=15)
-    parser.add_argument("--rerank-model", default="BAAI/bge-reranker-base")
-    parser.add_argument("--llm-model", default="gpt-4o")
-    parser.add_argument("--llm-temperature", type=float, default=0.1)
-    parser.add_argument("--embed-model", default="text-embedding-3-large")
+    parser.add_argument("--config", default=DEFAULT_CONFIG, help="YAML config file to load.")
+    parser.add_argument("--dataset-file", default=None)
+    parser.add_argument("--l1-vector-dir", default=None)
+    parser.add_argument("--node-index-dir", default=None)
+    parser.add_argument("--output-path", default=None)
+    parser.add_argument("--l1-top-k", type=int, default=None)
+    parser.add_argument("--l1-fetch-k", type=int, default=None)
+    parser.add_argument("--window-size", type=int, default=None)
+    parser.add_argument("--top-n", type=int, default=None)
+    parser.add_argument("--top-k-2", type=int, default=None)
+    parser.add_argument("--rerank-model", default=None)
+    parser.add_argument("--llm-model", default=None)
+    parser.add_argument("--llm-temperature", type=float, default=None)
+    parser.add_argument("--embed-model", default=None)
+    parser.add_argument("--prompt-str", default=None)
     parser.add_argument("--max-questions", type=int, default=None)
     return parser.parse_args()
 
 
 def main() -> None:
     args = parse_args()
-    config = SentenceWindowConfig(
+    config = load_dataclass_config(
+        SentenceWindowConfig,
+        args.config,
         dataset_file=args.dataset_file,
         l1_vector_dir=args.l1_vector_dir,
         node_index_dir=args.node_index_dir,
@@ -53,10 +61,11 @@ def main() -> None:
         llm_model=args.llm_model,
         llm_temperature=args.llm_temperature,
         embed_model=args.embed_model,
+        prompt_str=args.prompt_str,
         max_questions=args.max_questions,
     )
     run_results = run_sentence_window_pipeline(config)
-    print(f"Saved {len(run_results)} results to {args.output_path}")
+    print(f"Saved {len(run_results)} results to {config.output_path}")
 
 
 if __name__ == "__main__":

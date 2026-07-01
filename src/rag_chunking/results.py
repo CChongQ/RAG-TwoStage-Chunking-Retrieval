@@ -10,7 +10,8 @@ from rag_chunking.schemas import GoldAnswer, RunResult
 
 
 def build_question_to_gold_answer_map(documents: list[Any]) -> dict[str, GoldAnswer | str]:
-    """Build a map from question text to gold answer from loaded documents."""
+    """Build a map from question text to answer from loaded documents."""
+
     question_to_gold_answer: dict[str, GoldAnswer | str] = {}
     for document in documents:
         metadata = getattr(document, "metadata", {}) or {}

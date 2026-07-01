@@ -23,7 +23,7 @@ from rag_chunking.config import PROJECT_ROOT
 from rag_chunking.loaders import load_gold_answer_documents
 from rag_chunking.results import build_question_to_gold_answer_map, make_run_result, save_run_results
 from rag_chunking.retrieval import retrieve_documents
-from rag_chunking.vectorstores import as_retriever, load_chroma_vector_store
+from rag_chunking.vectorstores import as_retriever, create_openai_embedding, load_chroma_vector_store
 
 
 @dataclass(frozen=True)
@@ -65,8 +65,7 @@ def collect_questions(documents: list[Any]) -> list[str]:
 
 def get_l1_relevant_sections(vector_store: Any, query: str, config: SentenceWindowConfig) -> list[Any]:
     """Run Level 1 retrieval and keep the top structural sections."""
-    # Run retriever for the input query. The notebook fetched 10 from Chroma and
-    # then sliced to the requested top_k sections.
+    # Run retriever for the input query. The notebook fetched 10 from Chroma and then sliced to the requested top_k sections.
     retriever = as_retriever(
         vector_store,
         search_type="similarity",
@@ -79,24 +78,25 @@ def run_sentence_window_pipeline(config: SentenceWindowConfig | None = None) -> 
     """Run the two-stage structure + sentence-window RAG pipeline."""
     config = config or SentenceWindowConfig()
 
-    # Load test set and collect gold answers.
+    # Load test set
     documents = load_gold_answer_documents(config.dataset_file)
     test_questions = collect_questions(documents)
     if config.max_questions is not None:
         test_questions = test_questions[: config.max_questions]
     question_to_gold_map = build_question_to_gold_answer_map(documents)
 
-    # Load L1 vector store.
-    l1_vectorstore = load_chroma_vector_store(_resolve_project_path(config.l1_vector_dir))
+    # Load level 1 vector store with the same embedding model used at build time.
+    embeddings = create_openai_embedding(config.embed_model)
+    l1_vectorstore = load_chroma_vector_store(_resolve_project_path(config.l1_vector_dir), embedding=embeddings)
 
     all_results = []
     for index, query in enumerate(test_questions, start=1):
         print(f"============={index} Question:{query}=============")
 
-        # Level 1 retrieval.
+        # Level 1 retrieval
         relevant_sections = get_l1_relevant_sections(l1_vectorstore, query, config)
 
-        # Level 2 chunking.
+        # Level 2 chunking
         node_index = create_node_index(
             relevant_sections,
             config.window_size,

@@ -90,10 +90,24 @@ def create_proposition_prompt() -> Any:
 def create_proposition_runnable(model: str = DEFAULT_L2_MODEL, *, api_key: str | None = None) -> Any:
     """Create the L2 proposition extraction runnable."""
     try:
-        from langchain.output_parsers import PydanticOutputParser
-        from langchain_community.chat_models import ChatOpenAI
-    except ImportError as exc:
-        raise ImportError("create_proposition_runnable requires langchain and langchain-community.") from exc
+        from langchain_core.output_parsers import PydanticOutputParser
+    except ImportError:
+        try:
+            from langchain.output_parsers import PydanticOutputParser
+        except ImportError as exc:
+            raise ImportError(
+                "create_proposition_runnable requires langchain-core or langchain."
+            ) from exc
+
+    try:
+        from langchain_openai import ChatOpenAI
+    except ImportError:
+        try:
+            from langchain_community.chat_models import ChatOpenAI
+        except ImportError as exc:
+            raise ImportError(
+                "create_proposition_runnable requires langchain-openai or langchain-community."
+            ) from exc
 
     parser = PydanticOutputParser(pydantic_object=get_sentences_model())
     prompt = create_proposition_prompt()

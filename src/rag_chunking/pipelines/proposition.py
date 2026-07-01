@@ -26,7 +26,7 @@ from rag_chunking.generation import (
 from rag_chunking.loaders import load_gold_answer_documents
 from rag_chunking.results import build_question_to_gold_answer_map, make_run_result, save_run_results
 from rag_chunking.retrieval import documents_to_texts, retrieve_documents
-from rag_chunking.vectorstores import as_retriever, load_chroma_vector_store, save_faiss_vector_store
+from rag_chunking.vectorstores import as_retriever, create_openai_embedding, load_chroma_vector_store, save_faiss_vector_store
 
 
 @dataclass(frozen=True)
@@ -62,14 +62,6 @@ def default_output_path(l2_model: str) -> Path:
     return PROJECT_ROOT / "evaluation" / f"run_results_proposition_{l2_model}_{today}.json"
 
 
-def create_openai_embedding(model: str) -> Any:
-    """Create the shared OpenAI embedding model used for L1/L2 vector stores."""
-    try:
-        from langchain_openai import OpenAIEmbeddings
-    except ImportError as exc:
-        raise ImportError("create_openai_embedding requires langchain-openai.") from exc
-
-    return OpenAIEmbeddings(model=model)
 
 
 def collect_questions(documents: list[Any]) -> list[str]:
