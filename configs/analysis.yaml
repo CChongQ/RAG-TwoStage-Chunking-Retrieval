@@ -4,5 +4,34 @@ method_files:
   Structured_Baseline: evaluation/eval_2025-04-05_gpt-4o_run_results_baseline_L1.json
   Sentence_Window: evaluation/eval_2025-04-05_run_results_sw_gpt4o_2025-04-05.json
   Proposition: evaluation/eval_2025-04-06_run_results_proposition_gpt4o.json
-fact_based_questions: []
-broad_questions: []
+fact_based_questions: [ "who sang the theme tune to absolutely fabulous",
+    "where did the annual wife carrying world championships take place",
+    "when was figure skating introduced to the olympics",
+    "who sings in the eye of the storm",
+    "who won the primary for governor of illinois",
+    "where did they film american horror story coven",
+    "what film has the song don't you forget about me",
+    "where is archangel raphael mentioned in the bible",
+    "who sings the theme song to one tree hill",
+    "who fired the first shot of the civil war at fort sumter",
+    "who plays amy on the secret life of an american teenager",
+    "when is the second sound of the heartbeat produced",
+    "who plays chuck on the tv show chuck",
+    "which olsen twin was in full house more",
+    "how much money does argentina make from tourism",
+    "who did the french revolt against in 1789",
+    "who is the kicker for the new york giants",
+    "who played the mom in lost in space 2018",
+    "who recorded the song do you love me",
+    "when did humans first occupy the international space station",
+    "who played darth vader in the original trilogy",
+    "what does c class stand for in mercedes benz",
+    "how many episodes will prison break season 5 have",
+    "when was the 1913 natives land act repealed",
+    "where was best years of our lives filmed"]
+broad_questions: [
+ "where is the best farming soil in the us and where did all the dirt come from",
+    "summary of philip sidney an apology for poetry",
+    "what is the main job of the pharynx",
+    "how is the energy generated in a main sequence star",
+    "what is the difference between priest and bishop"]
