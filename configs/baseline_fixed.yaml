@@ -1,0 +1,14 @@
+# Fixed-size baseline converted from Baseline_1.ipynb
+dataset_file: gold_test_file_30.json
+vector_dir: Baseline_vector
+output_path: evaluation/run_results_baseline.json
+chunk_size: 256
+chunk_overlap: 20
+top_k: 10
+temperature: 0.2
+top_p: 0.9
+embedding_model: text-embedding-3-large
+generation_model: gpt-5-nano
+rebuild_vector_store: false
+max_questions: null
+verbose: true

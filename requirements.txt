@@ -1,0 +1,36 @@
+# Core OpenAI and LangChain stack
+openai
+langchain
+langchain-core
+langchain-community
+langchain-openai
+langchain-chroma
+langchain-text-splitters
+chromadb
+jq
+
+# Vector stores and embeddings
+faiss-cpu
+sentence-transformers
+transformers
+
+# LlamaIndex sentence-window pipeline
+llama-index
+llama-index-core
+llama-index-llms-openai
+llama-index-embeddings-openai
+
+# Evaluation and analysis
+ragas
+pandas
+numpy
+scipy
+matplotlib
+seaborn
+tabulate
+tiktoken
+
+# Parsing and config
+beautifulsoup4
+pydantic
+pyyaml
