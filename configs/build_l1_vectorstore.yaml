@@ -1,6 +1,6 @@
-# Structure-based Level 1 vector-store build
+﻿# Structure-based Level 1 vector-store build
 dataset_file: gold_test_file_30.json
-vector_dir: L1_vector_final
+vector_dir: artifacts/vectorstores/L1_vector_final
 embedding_model: text-embedding-3-large
 max_documents: null
 overwrite: false

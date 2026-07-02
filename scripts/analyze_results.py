@@ -1,4 +1,4 @@
-"""Analyze evaluated RAG result JSON files."""
+﻿"""Analyze evaluated RAG result JSON files."""
 
 from __future__ import annotations
 
@@ -36,7 +36,7 @@ def parse_args() -> argparse.Namespace:
         "--method-file",
         action="append",
         type=parse_method_path,
-        help="Method/file pair, for example Baseline=evaluation/eval_baseline.json.",
+        help="Method/file pair, for example Baseline=artifacts/evaluations/eval_baseline.json.",
     )
     return parser.parse_args()
 

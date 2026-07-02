@@ -1,4 +1,4 @@
-"""RAGAS scoring helpers for pipeline run-result JSON files."""
+﻿"""RAGAS scoring helpers for pipeline run-result JSON files."""
 
 from __future__ import annotations
 
@@ -36,7 +36,7 @@ def default_eval_output_path(input_path: str | Path) -> Path:
     """Match the notebook's dated eval output filename."""
     today = datetime.today().strftime("%Y-%m-%d")
     input_name = Path(input_path).name
-    return PROJECT_ROOT / "evaluation" / f"eval_{today}_{input_name}"
+    return PROJECT_ROOT / "artifacts" / "evaluations" / f"eval_{today}_{input_name}"
 
 
 def combine_gold_reference(gold_answer: Any) -> str:
