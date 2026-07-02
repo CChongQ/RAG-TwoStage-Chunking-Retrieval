@@ -1,4 +1,4 @@
-"""Two-stage structure + sentence-window RAG pipeline."""
+﻿"""Two-stage structure + sentence-window RAG pipeline."""
 
 from __future__ import annotations
 
@@ -31,9 +31,9 @@ class SentenceWindowConfig:
     """Configuration for the two-stage sentence-window pipeline."""
 
     dataset_file: str = "gold_test_file_30.json"
-    l1_vector_dir: str = "L1_vector_final"
-    node_index_dir: str = "L2_nodes_test"
-    output_path: str = "evaluation/run_results_sentence_window.json"
+    l1_vector_dir: str = "artifacts/vectorstores/L1_vector_final"
+    node_index_dir: str = "artifacts/vectorstores/L2_nodes_test"
+    output_path: str = "artifacts/evaluations/run_results_sentence_window.json"
     l1_top_k: int = 3
     l1_fetch_k: int = 10
     window_size: int = DEFAULT_WINDOW_SIZE

@@ -1,4 +1,4 @@
-"""Project-level path helpers and YAML configuration loading."""
+﻿"""Project-level path helpers and YAML configuration loading."""
 
 from dataclasses import fields, is_dataclass, replace
 from pathlib import Path
@@ -9,7 +9,7 @@ import yaml
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 DATASET_DIR = PROJECT_ROOT / "dataset"
-EVALUATION_DIR = PROJECT_ROOT / "evaluation"
+ARTIFACTS_DIR = PROJECT_ROOT / "artifacts"
 CONFIG_DIR = PROJECT_ROOT / "configs"
 
 T = TypeVar("T")

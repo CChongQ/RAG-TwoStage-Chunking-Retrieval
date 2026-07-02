@@ -1,4 +1,4 @@
-"""Two-stage structure + proposition RAG pipeline."""
+﻿"""Two-stage structure + proposition RAG pipeline."""
 
 from __future__ import annotations
 
@@ -34,8 +34,8 @@ class PropositionPipelineConfig:
     """Configuration for the two-stage proposition pipeline."""
 
     dataset_file: str = "gold_test_file_30.json"
-    l1_vector_dir: str = "L1_vector_final"
-    l2_vector_dir: str = "L2_vector"
+    l1_vector_dir: str = "artifacts/vectorstores/L1_vector_final"
+    l2_vector_dir: str = "artifacts/vectorstores/L2_vector"
     output_path: str | None = None
     l1_top_k: int = DEFAULT_L1_TOP_K
     l1_fetch_k: int = DEFAULT_L1_FETCH_K
@@ -59,7 +59,7 @@ def _resolve_project_path(path: str | Path) -> Path:
 def default_output_path(l2_model: str) -> Path:
     """Match the notebook's dated proposition output filename."""
     today = datetime.today().strftime("%Y-%m-%d")
-    return PROJECT_ROOT / "evaluation" / f"run_results_proposition_{l2_model}_{today}.json"
+    return PROJECT_ROOT / "artifacts" / "evaluations" / f"run_results_proposition_{l2_model}_{today}.json"
 
 
 

@@ -1,4 +1,4 @@
-"""Fixed-size baseline RAG pipeline."""
+﻿"""Fixed-size baseline RAG pipeline."""
 
 from __future__ import annotations
 
@@ -36,8 +36,8 @@ class FixedBaselineConfig:
     """Configuration for the fixed-size baseline pipeline."""
 
     dataset_file: str = "gold_test_file_30.json"
-    vector_dir: str = "Baseline_vector"
-    output_path: str = "evaluation/run_results_baseline.json"
+    vector_dir: str = "artifacts/vectorstores/Baseline_vector"
+    output_path: str = "artifacts/evaluations/run_results_baseline.json"
     chunk_size: int = DEFAULT_CHUNK_SIZE
     chunk_overlap: int = DEFAULT_CHUNK_OVERLAP
     top_k: int = 10

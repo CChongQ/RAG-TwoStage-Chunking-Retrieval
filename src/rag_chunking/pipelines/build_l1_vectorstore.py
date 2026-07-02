@@ -1,4 +1,4 @@
-"""Build the structure-based Level 1 Chroma vector store."""
+﻿"""Build the structure-based Level 1 Chroma vector store."""
 
 from __future__ import annotations
 
@@ -23,7 +23,7 @@ class L1VectorBuildConfig:
     """Configuration for building a structure-based L1 vector store."""
 
     dataset_file: str = "gold_test_file_30.json"
-    vector_dir: str = "L1_vector_final"
+    vector_dir: str = "artifacts/vectorstores/L1_vector_final"
     embedding_model: str = DEFAULT_OPENAI_EMBED_MODEL
     max_documents: int | None = None
     overwrite: bool = False
