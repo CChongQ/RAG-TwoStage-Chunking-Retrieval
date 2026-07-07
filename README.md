@@ -107,10 +107,22 @@ If `artifacts/vectorstores/Baseline_vector/` does not exist or you changed the b
 python scripts/run_baseline_fixed.py --rebuild-vector-store
 ```
 
-#### 2.2 Two-Stage RAG 1: Sentence-Window Pipeline
+#### 2.2 Structure-Based Baseline
 
 ```powershell
-python scripts/run_sentence_window.py --config configs/sentence_window.yaml
+python scripts/run_baseline_structure.py --config configs/baseline_structure.yaml
+```
+
+This pipeline:
+
+1. loads the Level 1 vector store
+2. retrieves relevant structural sections directly
+3. generates the final answer from those retrieved sections
+
+#### 2.3 Two-Stage RAG 1: Sentence-Window Pipeline
+
+```powershell
+python scripts/run_sentence_window.py--config configs/sentence_window.yaml
 ```
 
 This pipeline:
@@ -120,8 +132,7 @@ This pipeline:
 3. builds sentence-window nodes for those sections
 4. runs sentence-window retrieval and answer generation
 
-
-#### 2.3 Two-Stage RAG 2: Proposition Pipeline
+#### 2.4 Two-Stage RAG 2: Proposition Pipeline
 
 ```powershell
 python scripts/run_proposition.py --config configs/proposition.yaml
@@ -134,7 +145,6 @@ This pipeline:
 3. splits retrieved sections into propositions
 4. embeds propositions into a temporary/local Level 2 store
 5. retrieves proposition contexts and generates the final answer
-
 ## Evaluation
 
 We use RAGAS to evaluate four **metrics**:
@@ -187,8 +197,9 @@ configs/analysis.yaml
 
 ```powershell
 python scripts/build_l1_vectorstore.py --config configs/build_l1_vectorstore.yaml --overwrite
-python scripts/run_baseline_fixed.py 
-python scripts/run_sentence_window.py 
+python scripts/run_baseline_fixed.py
+python scripts/run_baseline_structure.py
+python scripts/run_sentence_window.py
 python scripts/run_proposition.py
 python scripts/evaluate_all.py --config configs/evaluate_all.yaml
 ```
