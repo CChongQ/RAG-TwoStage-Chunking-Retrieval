@@ -1,5 +1,5 @@
-﻿# RAGAS evaluation for a single run-result file
-input_path: artifacts/evaluations/run_results_baseline.json
+# RAGAS evaluation for a single run-result file
+input_path: artifacts/run_results/run_results_baseline.json
 output_path: null
-evaluator_model: gpt-3.5-turbo
+evaluator_model: gpt-5-nano
 embedding_model: null

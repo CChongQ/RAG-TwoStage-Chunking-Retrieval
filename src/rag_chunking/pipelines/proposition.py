@@ -1,4 +1,4 @@
-﻿"""Two-stage structure + proposition RAG pipeline."""
+"""Two-stage structure + proposition RAG pipeline."""
 
 from __future__ import annotations
 
@@ -59,7 +59,7 @@ def _resolve_project_path(path: str | Path) -> Path:
 def default_output_path(l2_model: str) -> Path:
     """Match the notebook's dated proposition output filename."""
     today = datetime.today().strftime("%Y-%m-%d")
-    return PROJECT_ROOT / "artifacts" / "evaluations" / f"run_results_proposition_{l2_model}_{today}.json"
+    return PROJECT_ROOT / "artifacts" / "run_results" / f"run_results_proposition_{l2_model}_{today}.json"
 
 
 
