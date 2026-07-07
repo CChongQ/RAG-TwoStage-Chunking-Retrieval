@@ -1,6 +1,7 @@
 # RAGAS evaluation for multiple run-result files
 run_files:
   Baseline: artifacts/run_results/run_results_baseline.json
+  Structured_Baseline: artifacts/run_results/run_results_baseline_L1.json
   Sentence_Window: artifacts/run_results/run_results_sentence_window.json
   Proposition: artifacts/run_results/run_results_proposition.json
 output_dir: artifacts/evaluations

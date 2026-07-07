@@ -1,0 +1,11 @@
+# Structure-based baseline using the Level 1 vector store
+dataset_file: gold_test_file_30.json
+l1_vector_dir: artifacts/vectorstores/L1_vector_final
+output_path: artifacts/run_results/run_results_baseline_L1.json
+top_k: 2
+embedding_model: text-embedding-3-large
+generation_model: gpt-5-nano
+temperature: 0.2
+top_p: 0.9
+max_questions: null
+verbose: true

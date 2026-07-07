@@ -37,25 +37,31 @@ class StructureBasedChunker:
         """Convert a table into compact prose, skipping navigation tables."""
 
         try:
+            # Skip navigation tables
             table_classes = table.get("class", []) or []
             if any(table_class in self.skip_table_classes for table_class in table_classes):
                 return ""
 
+            # 1. Extract caption
             caption = table.find("caption")
             caption_text = caption.get_text(" ", strip=True) if caption else "the data"
 
+            # 2. Extract headers (th or first row's td)
             header_row = table.find("tr")
             headers = []
             if header_row:
                 headers = [cell.get_text(" ", strip=True) for cell in header_row.find_all(["th", "td"])]
 
+            # 3. Process all rows
             rows = []
             for row_index, row in enumerate(table.find_all("tr")[1 if headers else 0 :], start=1):
                 cells = [cell.get_text(" ", strip=True) for cell in row.find_all(["td", "th"])]
                 if not cells or not any(cell.strip() for cell in cells):
                     continue
 
+                # Build sentence for each row
                 if headers:
+                    # With headers: "ColumnA is value1, ColumnB is value2"
                     row_parts = []
                     for cell_index, value in enumerate(cells):
                         if not value.strip():
@@ -65,8 +71,10 @@ class StructureBasedChunker:
                     if row_parts:
                         rows.append(", ".join(row_parts) + ".")
                 else:
+                    # Without headers: "Row 1: value1, value2..."
                     rows.append(f"Row {row_index}: {', '.join(cells)}.")
 
+            # 4. Combine into final paragraph
             if not rows:
                 return ""
             return f"Table '{caption_text}' shows: " + " ".join(rows)
@@ -78,24 +86,32 @@ class StructureBasedChunker:
         """Remove tags, citation markers, and extra whitespace from text."""
         soup = self._soup(text)
         cleaned = soup.get_text(" ", strip=True)
+        # Additionally clean [1][2] text references
         cleaned = re.sub(r"\[\d+\]", "", cleaned)
         cleaned = re.sub(r"\s+", " ", cleaned).strip()
         return cleaned
 
     def _remove_reference_elements(self, soup: Any) -> None:
+        # Enhanced reference removal - handle all known reference forms
         reference_selectors = [
+            # Wikipedia standard references
             "sup.reference",
             "span.mw-cite-backlink",
+            # General citation markers
             "span.citation",
             "span.footnote",
             "div.footnotes",
+            # Reference blocks
             "ol.references",
             "div.reflist",
             "div.refbegin",
+            # Hidden content
             "div.noprint",
             "span.mw-editsection",
+            # Citation links
             'a[href^="#cite"]',
             'a[href*="wikisource"]',
+            # Modern HTML5 notes
             '[role="doc-noteref"]',
             '[role="doc-endnotes"]',
         ]
@@ -125,6 +141,7 @@ class StructureBasedChunker:
         current_content: list[str] = []
 
         def flush() -> None:
+            # Save current section
             nonlocal current_content
             content = self.clean_text(" ".join(current_content))
             if hierarchy and content:
@@ -143,11 +160,13 @@ class StructureBasedChunker:
             name = element.name.lower()
             if name in {"h1", "h2", "h3"}:
                 flush()
+                # Update hierarchy
                 level = int(name[1])
                 title = element.get_text(" ", strip=True)
                 hierarchy = hierarchy[: level - 1] + [title]
                 current_h4 = None
             elif name == "h4":
+                # Set new H4 as current
                 flush()
                 current_h4 = element.get_text(" ", strip=True)
             else:
@@ -158,6 +177,7 @@ class StructureBasedChunker:
         flush()
 
         if not sections:
+            # Fallback: if no sections were found, return the entire document
             full_text = self.clean_text(str(soup))
             if full_text:
                 sections.append(
@@ -209,6 +229,7 @@ class StructureBasedChunker:
             except ImportError as exc:
                 raise ImportError("to_langchain_documents requires langchain-core or langchain.") from exc
 
+        # Convert sections to LangChain documents
         return [
             Document(
                 page_content=section["section"]["content"],
